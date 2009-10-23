@@ -1,3 +1,12 @@
+//#ifdef tick
+(function(jQuery, window, undefined){
+var rdashAlpha = /-([a-z])/ig,
+    fcamelCase = function(all, letter){
+		return letter.toUpperCase();
+	},
+    now = jQuery.helpers.now
+//#endif
+
 var elemdisplay = {},
 	timerId,
 	fxAttrs = [
@@ -420,3 +429,6 @@ jQuery.extend( jQuery.fx, {
 		}
 	}
 });
+//#ifdef   
+})(jQuery, window);
+//#endif

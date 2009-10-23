@@ -1,3 +1,8 @@
+//#ifdef tick
+(function(jQuery, window, undefined){
+    var isSimple = /^.[^:#\[\.,]*$/
+//#endif
+
 var winnow = function( elements, qualifier, keep ) {
 	if(jQuery.isFunction( qualifier )) {
 		return jQuery.grep(elements, function(elem, i) {
@@ -140,3 +145,7 @@ jQuery.each({
 		return this.pushStack( ret, name, selector );
 	};
 });
+
+//#ifdef tick
+})(jQuery, window);
+//#endif

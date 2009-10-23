@@ -1,3 +1,8 @@
+//#ifdef tick
+(function(jQuery, window, undefined){
+var access = jQuery.helpers.access;
+//#endif
+
 // exclude the following css properties to add px
 var rexclude = /z-?index|font-?weight|opacity|zoom|line-?height/i,
 	ralpha = /alpha\([^)]*\)/,
@@ -14,7 +19,8 @@ var rexclude = /z-?index|font-?weight|opacity|zoom|line-?height/i,
 	styleFloat = jQuery.support.cssFloat ? "cssFloat" : "styleFloat",
 	fcamelCase = function(all, letter){
 		return letter.toUpperCase();
-	};
+	},
+    access = jQuery.helpers.access;
 
 jQuery.fn.css = function( name, value ) {
 	return access( this, name, value, true, function( elem, name, value ) {
@@ -197,3 +203,7 @@ jQuery.extend({
 		}
 	}
 });
+
+//#ifdef   
+})(jQuery, window);
+//#endif

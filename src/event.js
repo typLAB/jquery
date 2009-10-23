@@ -1,3 +1,8 @@
+//#ifdef tick
+(function(jQuery, window, undefined){
+var now = jQuery.helpers.now, expando = jQuery.helpers.expando 
+//#endif
+ 
 /*
  * A number of helper functions used for managing events.
  * Many of the ideas behind this code originated from
@@ -830,8 +835,7 @@ function bindReady() {
 
 		// If IE and not an iframe
 		// continually check to see if the document is ready
-		// NOTE: DO NOT CHANGE TO ===, FAILS IN IE.
-		if ( document.documentElement.doScroll && window == window.top ) (function() {
+		if ( document.documentElement.doScroll && window === window.top ) (function() {
 			if ( jQuery.isReady ) {
 				return;
 			}
@@ -878,3 +882,8 @@ jQuery( window ).bind( 'unload', function() {
 	}
 });
 @*/
+
+    
+//#ifdef   
+})(jQuery, window);
+//#endif

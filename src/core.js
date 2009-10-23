@@ -1,4 +1,8 @@
-// Define a local copy of jQuery
+
+(function(window, undefined){
+
+	
+   // Define a local copy of jQuery
 var jQuery = function( selector, context ) {
 		// The jQuery object is actually just the init constructor 'enhanced'
 		return arguments.length === 0 ?
@@ -79,7 +83,7 @@ jQuery.fn = jQuery.prototype = {
 						selector = [ doc.createElement( ret[1] ) ];
 
 					} else {
-						ret = buildFragment( [ match[1] ], [ doc ] );
+						ret = jQuery.helpers.buildFragment( [ match[1] ], [ doc ] );
 						selector = (ret.cacheable ? ret.fragment.cloneNode(true) : ret.fragment).childNodes;
 					}
 
@@ -229,7 +233,13 @@ jQuery.fn = jQuery.prototype = {
 	// Behaves like an Array's method, not like a jQuery method.
 	push: push,
 	sort: [].sort,
-	splice: [].splice
+	splice: [].splice,
+    find : function(selector, context){
+		context = context || document;
+		return jQuery( $.makeArray( context.querySelectorAll(selector)) );
+        
+
+    }
 };
 
 // Give the init function the jQuery prototype for later instantiation
@@ -501,8 +511,100 @@ jQuery.extend({
 		opera: /opera/.test( userAgent ),
 		msie: /msie/.test( userAgent ) && !/opera/.test( userAgent ),
 		mozilla: /mozilla/.test( userAgent ) && !/(compatible|webkit)/.test( userAgent )
-	}
+	},
+	getScript : function(url, success,complete,  charSet){
+			var head = document.getElementsByTagName("head")[0] || document.documentElement;
+			var script = document.createElement("script");
+			script.src = url;
+			if ( charSet ) {
+				script.charset = charSet;
+			}
+
+			// Handle Script loading
+
+			var done = false;
+
+			// Attach handlers for all browsers
+			script.onload = script.onreadystatechange = function(){
+				if ( !done && (!this.readyState ||
+						this.readyState === "loaded" || this.readyState === "complete") ) {
+					done = true;
+					success && success();
+					complete && complete();
+
+					// Handle memory leak in IE
+					script.onload = script.onreadystatechange = null;
+					if ( head && script.parentNode ) {
+						head.removeChild( script );
+					}
+				}
+			};
+			// Use insertBefore instead of appendChild  to circumvent an IE6 bug.
+			// This arises when a base node is used (#2709 and #4378).
+			head.insertBefore( script, head.firstChild );
+
+			// We handle everything using the script element injection
+			return undefined;
+	},
+    helpers : {
+        // Mutifunctional method to get and set values to a collection
+        // The value/s can be optionally by executed if its a function
+        access: function( elems, key, value, exec, fn ) {
+        	var l = elems.length;
+        	
+        	// Setting many attributes
+        	if ( typeof key === "object" ) {
+        			for (var k in key) {
+        				jQuery.helpers.access(elems, k, key[k], exec, fn);
+        			}
+        		return elems;
+        	}
+        	
+        	// Setting one attribute
+        	if (value !== undefined) {
+        		// Optionally, function values get executed if exec is true
+        		exec = exec && jQuery.isFunction(value);
+        		
+        		for (var i = 0; i < l; i++) {
+        			var elem = elems[i],
+        				val = exec ? value.call(elem, i) : value;
+        			fn(elem, key, val);
+        		}
+        		return elems;
+        	}
+        	
+        	// Getting an attribute
+        	return l ? fn(elems[0], key) : null;
+        },
+        now: function() {
+        	return (new Date).getTime();
+        },
+        evalScript: function( i, elem ) {
+        	if ( elem.src ) {
+        		jQuery.ajax({
+        			url: elem.src,
+        			async: false,
+        			dataType: "script"
+        		});
+        	} else {
+        		jQuery.globalEval( elem.text || elem.textContent || elem.innerHTML || "" );
+        	}
+        
+        	if ( elem.parentNode ) {
+        		elem.parentNode.removeChild( elem );
+    	}
+    }
+}
+
+
+    
+    
 });
+
+var now = jQuery.helpers.now, 
+    evalScript = jQuery.helpers.evalScript,
+    access = jQuery.helpers.access;
+
 
 if ( indexOf ) {
 	jQuery.inArray = function( elem, array ) {
@@ -513,52 +615,17 @@ if ( indexOf ) {
 // All jQuery objects should point back to these
 rootjQuery = jQuery(document);
 
-function evalScript( i, elem ) {
-	if ( elem.src ) {
-		jQuery.ajax({
-			url: elem.src,
-			async: false,
-			dataType: "script"
-		});
-	} else {
-		jQuery.globalEval( elem.text || elem.textContent || elem.innerHTML || "" );
-	}
 
-	if ( elem.parentNode ) {
-		elem.parentNode.removeChild( elem );
-	}
-}
 
-// Mutifunctional method to get and set values to a collection
-// The value/s can be optionally by executed if its a function
-function access( elems, key, value, exec, fn ) {
-	var l = elems.length;
-	
-	// Setting many attributes
-	if ( typeof key === "object" ) {
-			for (var k in key) {
-				access(elems, k, key[k], exec, fn);
-			}
-		return elems;
-	}
-	
-	// Setting one attribute
-	if (value !== undefined) {
-		// Optionally, function values get executed if exec is true
-		exec = exec && jQuery.isFunction(value);
-		
-		for (var i = 0; i < l; i++) {
-			var elem = elems[i],
-				val = exec ? value.call(elem, i) : value;
-			fn(elem, key, val);
-		}
-		return elems;
-	}
-	
-	// Getting an attribute
-	return l ? fn(elems[0], key) : null;
-}
 
-function now() {
-	return (new Date).getTime();
-}
+
+	
+	
+	
+//#ifdef tick
+  
+	// Expose jQuery to the global object
+	window.jQuery = window.$ = jQuery;
+
+})(window);
+//#endif

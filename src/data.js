@@ -1,4 +1,11 @@
-var expando = "jQuery" + now(), uuid = 0, windowData = {};
+//#ifdef tick
+(function(jQuery, window, undefined){
+//#endif
+
+var expando = (jQuery.helpers.expando = "jQuery" + jQuery.helpers.now()), 
+   uuid = 0, 
+   windowData = {};
+   
 var emptyObject = {};
 
 jQuery.extend({
@@ -168,3 +175,8 @@ jQuery.fn.extend({
 		return this.queue( type || "fx", [] );
 	}
 });
+
+
+//#ifdef   
+})(jQuery, window);
+//#endif

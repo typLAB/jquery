@@ -1,4 +1,6 @@
-// Expose jQuery to the global object
-window.jQuery = window.$ = jQuery;
+//#ifdef tick
+(function(){
+//#endif
+	window.jQuery = window.$ = jQuery;
 
 })(window);

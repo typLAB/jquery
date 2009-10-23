@@ -1,8 +1,14 @@
+//#ifdef tick
+(function(jQuery, window, undefined){
+    var expando = jQuery.helpers.expando, evalScript = jQuery.helpers.evalScript;
+//#endif
+
+
 var rinlinejQuery = / jQuery\d+="(?:\d+|null)"/g,
 	rleadingWhitespace = /^\s+/,
-	rxhtmlTag = /(<([\w:]+)[^>]*?)\/>/g,
+	rxhtmlTag = /(<(\w+)[^>]*?)\/>/g,
 	rselfClosing = /^(?:abbr|br|col|img|input|link|meta|param|hr|area|embed)$/i,
-	rtagName = /<([\w:]+)/,
+	rtagName = /<(\w+)/,
 	rtbody = /<tbody/i,
 	rhtml = /</,
 	fcloseTag = function(all, front, tag){
@@ -246,7 +252,7 @@ jQuery.fn.extend({
 			if ( args[0] && args[0].parentNode && args[0].parentNode.nodeType === 11 ) {
 				results = { fragment: args[0].parentNode };
 			} else {
-				results = buildFragment( args, this, scripts );
+				results = jQuery.helpers.buildFragment( args, this, scripts );
 			}
 
 			first = results.fragment.firstChild;
@@ -281,8 +287,7 @@ jQuery.fn.extend({
 		}
 	}
 });
-
-function buildFragment(args, nodes, scripts){
+jQuery.helpers.buildFragment = function(args, nodes, scripts){
 	var fragment, cacheable, cached, cacheresults, doc;
 
 	if ( args.length === 1 && typeof args[0] === "string" && args[0].length < 512 && args[0].indexOf("<option") < 0 ) {
@@ -462,3 +467,8 @@ function cleanData( elems ) {
 		}
 	}
 }
+
+
+//#ifdef tick
+})(jQuery, window);
+//#endif

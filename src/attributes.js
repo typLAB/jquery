@@ -1,3 +1,8 @@
+//#ifdef tick
+(function(jQuery, window, undefined){
+    var access = jQuery.helpers.access;
+//#endif
+
 jQuery.fn.extend({
 	attr: function( name, value ) {
 		return access(this, name, value, true, jQuery.attr);
@@ -262,3 +267,7 @@ jQuery.extend({
 		return jQuery.style(elem, name, value);
 	}
 });
+
+//#ifdef   
+})(jQuery, window);
+//#endif

@@ -1,0 +1,44 @@
+<html>
+    <head>
+        
+    </head>
+    <body>
+        <div id="cssthing">CSS THING
+        
+            <div> Something to grab</div>
+        </div>
+        <input id='thing' value='val works'/>
+        <script src='src/core.js' type='text/javascript'></script>
+        <script type='text/javascript'>
+            $.getScript('src/data.js')
+            $.getScript('src/event.js', function(){
+                $(function(){
+                    alert('ready')
+                    $.get("data.json",null,function(response){
+                        //alert(response.data)
+                    },'json' )
+                    alert( $("#thing").val() )
+                    $("#cssthing").css("background","blue")
+                    alert( $("#thing").height()+" height works" )
+                    $("#cssthing div").css("background", "red")
+                    $("#cssthing div").fadeOut('slow')
+                    $("#cssthing").html("html work")
+                    alert($("#cssthing").offset().top)
+                    $("#cssthing").next()
+                })
+                
+            })
+            $.getScript('src/ajax.js')
+            $.getScript('src/attributes.js')
+            $.getScript('src/support.js')
+            $.getScript('src/css.js')//needs support
+            $.getScript('src/dimensions.js')
+            $.getScript('src/selector.js')
+            $.getScript('src/fx.js')//depends on selector
+            $.getScript('src/manipulation.js')
+            $.getScript('src/offset.js')
+            $.getScript('src/traversing.js')
+            
+        </script>
+    </body>
+</html>

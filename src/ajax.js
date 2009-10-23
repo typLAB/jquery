@@ -1,4 +1,9 @@
-var jsc = now(),
+//#ifdef tick
+(function(jQuery, window, undefined){
+//#endif
+
+
+var jsc = jQuery.helpers.now(),
 	rscript = /<script(.|\s)*?\/script>/g,
 	rselectTextarea = /select|textarea/i,
 	rinput = /text|hidden|password|search/i,
@@ -637,3 +642,7 @@ jQuery.extend({
 	}
 
 });
+
+//#ifdef   
+})(jQuery, window);
+//#endif
