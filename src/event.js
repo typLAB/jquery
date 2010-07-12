@@ -448,7 +448,7 @@ jQuery.event = {
 		}
 
 		// check if target is a textnode (safari)
-		if ( event.target.nodeType === 3 ) {
+		if ( event.target.nodeType === 3 && event.type.slice(0,3) !== "DOM" ) { // DOM mutation events really have text nodes as targets
 			event.target = event.target.parentNode;
 		}
 
